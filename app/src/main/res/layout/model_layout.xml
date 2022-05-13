@@ -4,7 +4,6 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background=""
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="10dp">
@@ -15,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="@color/purple_500"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_share"
         app:layout_constraintEnd_toStartOf="@+id/btn_share"
         app:layout_constraintStart_toStartOf="parent" />
@@ -34,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="237dp"
-        app:cardBackgroundColor="?attr/colorPrimary"
+        app:cardBackgroundColor="@color/purple_500"
         app:cardCornerRadius="18dp"
         app:cardElevation="10dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_share"

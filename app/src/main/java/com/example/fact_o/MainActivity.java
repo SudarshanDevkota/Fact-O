@@ -1,10 +1,12 @@
 package com.example.fact_o;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.fact_o.adapter.RecyclerAdapter;
 import com.example.fact_o.api.ApiCalls;
 import com.example.fact_o.client.FactClient;
 import com.example.fact_o.model.Fact;
@@ -17,11 +19,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
-
+    ViewPager2 viewPager ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        viewPager = findViewById(R.id.view_pager);
+
+
+
         ApiCalls api = FactClient.getInstance().create(ApiCalls.class);
         Call<List<Fact>> call = api.getFacts();
         call.enqueue(new Callback<List<Fact>>() {
@@ -39,9 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void generateList(List<Fact> list){
-        for(Fact f : list){
-            Log.d("TAG", "generateList: fact " + f.getFact());
-        }
+        Log.d("TAG", "generateList: content loaded");
+        viewPager.setAdapter(new RecyclerAdapter(list,this));
 
     }
 
