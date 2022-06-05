@@ -6,6 +6,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.example.fact_o.adapter.RecyclerAdapter;
@@ -25,12 +27,14 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     RecyclerAdapter adapter;
     List<Fact> factList;
+    Button btnShare,btnSave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         viewPager = findViewById(R.id.view_pager);
-
+        btnSave = findViewById(R.id.btn_save);
+        btnShare = findViewById(R.id.btn_share);
         factList = new ArrayList<>();
         adapter = new RecyclerAdapter(factList,this);
         viewPager.setAdapter(adapter);
@@ -45,12 +49,23 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        btnShare.setOnClickListener(shareListener);
+        btnSave.setOnClickListener(saveListener);
         loadNewData();
 
 
     }
+
+    View.OnClickListener shareListener = v -> {
+
+    };
+    View.OnClickListener saveListener = v -> {
+
+    };
     private void generateList(List<Fact> list){
         Log.d("TAG", "generateList: content loaded");
+        if(factList.size()>120)
+            factList.clear();
         factList.addAll(list);
         adapter.notifyDataSetChanged();
 
@@ -66,9 +81,12 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Fact>> call, Throwable t) {
-
+                showToast();
             }
         });
+    }
+    private void showToast(){
+        Toast.makeText(this,"Network Not Available",Toast.LENGTH_SHORT).show();
     }
 
 }
