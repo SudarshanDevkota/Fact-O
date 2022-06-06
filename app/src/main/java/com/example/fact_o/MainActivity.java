@@ -1,8 +1,5 @@
 package com.example.fact_o;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,8 +8,11 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.fact_o.adapter.RecyclerAdapter;
 import com.example.fact_o.api.ApiCalls;
@@ -20,23 +20,21 @@ import com.example.fact_o.client.FactClient;
 import com.example.fact_o.model.Fact;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     RecyclerAdapter adapter;
     List<Fact> factList;
     Button btnShare, btnSave;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
         btnSave = findViewById(R.id.btn_save);
         btnShare = findViewById(R.id.btn_share);
+        progressBar = findViewById(R.id.progressBar);
         factList = new ArrayList<>();
         adapter = new RecyclerAdapter(factList, this);
         viewPager.setAdapter(adapter);
@@ -53,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 Log.d("TAG", "onPageSelected: " + position);
-                if (position % 30 == 28) {
+                if (position % 30 == 29) {
+                    progressBar.setVisibility(View.VISIBLE);
                     loadNewData();
                 }
 
@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
         });
         btnShare.setOnClickListener(shareListener);
         btnSave.setOnClickListener(saveListener);
+        btnSave.setVisibility(View.INVISIBLE);
+        btnShare.setVisibility(View.INVISIBLE);
         loadNewData();
 
 
@@ -80,11 +82,14 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void generateList(List<Fact> list) {
-        Log.d("TAG", "generateList: content loaded");
+        Log.d("TAG", "generateList: content loaded size:"+factList.size());
         if (factList.size() > 120)
             factList.clear();
         factList.addAll(list);
         adapter.notifyDataSetChanged();
+        btnSave.setVisibility(View.VISIBLE);
+        btnShare.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
 
     }
 
