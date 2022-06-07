@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.fact_o.adapter.RecyclerAdapter;
@@ -20,6 +21,7 @@ import com.example.fact_o.client.FactClient;
 import com.example.fact_o.model.Fact;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,6 +72,35 @@ public class MainActivity extends AppCompatActivity {
 
     View.OnClickListener shareListener = v -> {
 
+        Bitmap bitmap = getBitmap();
+        File cachePath = new File(getExternalCacheDir(),"images/");
+        cachePath.mkdirs();
+        File file = new File(cachePath,"temp.jpg");
+        FileOutputStream fileOutputStream;
+        try
+        {
+            fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+        } catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        Uri myImageFileUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", file);
+
+        //create a intent
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(Intent.EXTRA_STREAM, myImageFileUri);
+        intent.setType("image/jpeg");
+        startActivity(Intent.createChooser(intent, "Share with"));
+
     };
     View.OnClickListener saveListener = v -> {
         try {
@@ -113,15 +144,16 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private void saveImage() throws IOException {
+    private Bitmap getBitmap()  {
         viewPager.setDrawingCacheEnabled(true);
         viewPager.buildDrawingCache();
         viewPager.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         Bitmap bitmap = viewPager.getDrawingCache();
-        saveImage(bitmap);
+        return bitmap;
     }
 
-    private void saveImage(Bitmap bitmap) throws IOException {
+    private void saveImage() throws IOException {
+        Bitmap bitmap = getBitmap();
         String root = Environment.getExternalStorageDirectory().getAbsolutePath();
         File file = new File(root + "/Download");
         if (!file.exists())
