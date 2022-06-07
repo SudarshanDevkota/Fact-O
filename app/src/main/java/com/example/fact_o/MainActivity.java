@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         btnSave.setOnClickListener(saveListener);
         btnSave.setVisibility(View.INVISIBLE);
         btnShare.setVisibility(View.INVISIBLE);
+        btnReload.setVisibility(View.INVISIBLE);
         btnReload.setOnClickListener(reloadListener);
         loadNewData();
 
