@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 viewPager;
     RecyclerAdapter adapter;
     List<Fact> factList;
-    Button btnShare, btnSave;
+    Button btnShare, btnSave,btnReload;
     ProgressBar progressBar;
 
     @Override
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
         btnSave = findViewById(R.id.btn_save);
         btnShare = findViewById(R.id.btn_share);
+        btnReload = findViewById(R.id.btn_reload);
         progressBar = findViewById(R.id.progressBar);
         factList = new ArrayList<>();
         adapter = new RecyclerAdapter(factList, this);
@@ -65,10 +66,15 @@ public class MainActivity extends AppCompatActivity {
         btnSave.setOnClickListener(saveListener);
         btnSave.setVisibility(View.INVISIBLE);
         btnShare.setVisibility(View.INVISIBLE);
+        btnReload.setOnClickListener(reloadListener);
         loadNewData();
 
 
     }
+    View.OnClickListener reloadListener = v->{
+        loadNewData();
+        btnReload.setVisibility(View.INVISIBLE);
+    };
 
     View.OnClickListener shareListener = v -> {
 
@@ -121,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         btnSave.setVisibility(View.VISIBLE);
         btnShare.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
+        btnReload.setVisibility(View.INVISIBLE);
 
     }
 
@@ -136,6 +143,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Fact>> call, Throwable t) {
                 showToast("Network Not Available");
+                if(factList.isEmpty()){
+                    btnSave.setVisibility(View.INVISIBLE);
+                    btnShare.setVisibility(View.INVISIBLE);
+                    btnReload.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
