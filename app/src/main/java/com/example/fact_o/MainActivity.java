@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 Log.d("TAG", "onPageSelected: " + position);
-                if (position % 30 == 29) {
+                if (position % 30 == 29 && position==factList.size()-1) {
                     progressBar.setVisibility(View.VISIBLE);
                     loadNewData();
                 }
