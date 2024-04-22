@@ -10,6 +10,6 @@ import retrofit2.http.Headers;
 
 public interface ApiCalls {
     @Headers("X-Api-Key: cwYa40HzV+aO7BLiUJX9Mg==umPhIpiIPUmCrDUy")
-    @GET("/v1/facts?limit=30")
+    @GET("/v1/facts")
     Call<List<Fact>> getFacts();
 }

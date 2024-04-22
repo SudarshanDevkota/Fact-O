@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     RecyclerAdapter adapter;
     List<Fact> factList;
     Button btnShare, btnSave,btnReload;
-    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save);
         btnShare = findViewById(R.id.btn_share);
         btnReload = findViewById(R.id.btn_reload);
-        progressBar = findViewById(R.id.progressBar);
         factList = new ArrayList<>();
         adapter = new RecyclerAdapter(factList, this);
         viewPager.setAdapter(adapter);
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
                 Log.d("TAG", "onPageSelected: " + position);
                 if (position==factList.size()-1) {
-                    progressBar.setVisibility(View.VISIBLE);
                     loadNewData();
                 }
 
@@ -127,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
         btnSave.setVisibility(View.VISIBLE);
         btnShare.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.INVISIBLE);
         btnReload.setVisibility(View.INVISIBLE);
 
     }
